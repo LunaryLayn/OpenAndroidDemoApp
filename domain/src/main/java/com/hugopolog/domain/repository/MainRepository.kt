@@ -1,8 +1,11 @@
 package com.hugopolog.domain.repository
 
-import com.hugopolog.domain.entities.config.error.DataError
-import com.hugopolog.domain.entities.config.error.DataResult
+import androidx.paging.PagingData
+import com.hugopolog.domain.entities.config.DataError
+import com.hugopolog.domain.entities.config.DataResult
+import com.hugopolog.domain.entities.pokemon.PokemonModel
+import kotlinx.coroutines.flow.Flow
 
 interface MainRepository {
-    suspend fun doSomething(): DataResult<Unit, DataError>
+     fun getPokemons(): Flow<PagingData<PokemonModel>>
 }

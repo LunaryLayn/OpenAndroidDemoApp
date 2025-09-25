@@ -1,21 +1,31 @@
 package com.hugopolog.data.repository
 
-import android.util.Log
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.hugopolog.data.api.ApiService
-import com.hugopolog.data.util.ApiHelper.safeApiCall
-import com.hugopolog.domain.entities.config.error.DataError
-import com.hugopolog.domain.entities.config.error.DataResult
+import com.hugopolog.data.util.PokemonPagingSource
+import com.hugopolog.domain.entities.pokemon.PokemonModel
 import com.hugopolog.domain.repository.MainRepository
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class MainRepositoryImpl(
+class MainRepositoryImpl @Inject constructor(
     private val service: ApiService
 ) : MainRepository {
-    override suspend fun doSomething(): DataResult<Unit, DataError> {
-        return safeApiCall(
-            apiCall = { service.doSomething() },
-            mapper = { response ->
-                Log.d("MainRepositoryImpl", "Response: $response")
-            }
-        )
+
+    companion object{
+        const val PAGE_SIZE = 20
+        const val PREFETCH_DISTANCE = 3
+    }
+
+    override fun getPokemons(): Flow<PagingData<PokemonModel>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                prefetchDistance = PREFETCH_DISTANCE
+            ),
+            pagingSourceFactory = { PokemonPagingSource(pageSize = PAGE_SIZE, service = service) }
+        ).flow
     }
 }

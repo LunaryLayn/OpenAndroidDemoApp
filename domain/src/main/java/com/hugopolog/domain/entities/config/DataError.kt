@@ -1,4 +1,4 @@
-package com.hugopolog.domain.entities.config.error
+package com.hugopolog.domain.entities.config
 
 sealed interface DataError : RootError {
 

@@ -2,8 +2,8 @@ package com.hugopolog.data.util
 
 import android.util.Log
 import com.google.gson.JsonParseException
-import com.hugopolog.domain.entities.config.error.DataError
-import com.hugopolog.domain.entities.config.error.DataResult
+import com.hugopolog.domain.entities.config.DataError
+import com.hugopolog.domain.entities.config.DataResult
 import java.io.IOException
 import java.util.concurrent.TimeoutException
 import kotlin.coroutines.cancellation.CancellationException

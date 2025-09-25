@@ -76,6 +76,6 @@ object AppModule {
     @Provides
     @Singleton
     fun provideMainRepository(service: ApiService): MainRepository {
-        return MainRepositoryImpl(service)
+        return MainRepositoryImpl(service) // ✅ devuelve la implementación
     }
 }

@@ -58,6 +58,7 @@ dependencies {
     // 🔥 Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.compose.ui.text.google.fonts)
+    implementation(libs.androidx.paging.common)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
@@ -75,5 +76,7 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp.logging)
 
+
+    implementation(libs.androidx.paging.compose)
 
 }

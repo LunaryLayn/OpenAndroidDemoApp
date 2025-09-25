@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt.android) // 🔥 Plugin de Hilt
+    kotlin("kapt")
 }
 
 android {
@@ -42,5 +44,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp.logging)
-
+    implementation(libs.paging.runtime)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }
