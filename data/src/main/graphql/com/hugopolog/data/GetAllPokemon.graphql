@@ -1,0 +1,11 @@
+query GetAllPokemon($limit: Int!, $offset: Int!) {
+    pokemons: pokemon(limit: $limit, offset: $offset, order_by: {id: asc}) {
+        id
+        name
+        pokemontypes {
+            type {
+                name
+            }
+        }
+    }
+}
