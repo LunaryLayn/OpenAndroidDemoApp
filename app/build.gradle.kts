@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     kotlin("kapt")
     kotlin("plugin.serialization")
+    alias(libs.plugins.apollo)
 }
 
 android {
@@ -78,5 +79,7 @@ dependencies {
 
 
     implementation(libs.androidx.paging.compose)
-
+    implementation(libs.coil.compose)
+    implementation(libs.lottie.compose)
+    implementation(libs.apollo.runtime)
 }

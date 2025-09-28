@@ -6,6 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.hugopolog.demoappopen.ui.feature.home.HomeScreen
 import com.hugopolog.demoappopen.ui.feature.main.MainScreen
 
 @Composable
@@ -34,6 +35,9 @@ fun AppNavigation(
     }
 
     NavHost(navController = navController, startDestination = navigator.startDestination) {
+        composable<AppScreens.HomeScreen> {
+            HomeScreen()
+        }
         composable<AppScreens.MainScreen> {
             MainScreen()
         }

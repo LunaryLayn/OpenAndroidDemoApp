@@ -1,5 +1,6 @@
 package com.hugopolog.demoappopen.ui.feature.main
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -22,6 +23,7 @@ class MainViewModel @Inject constructor(
         private set
 
     init {
+        screenState = screenState.copy(isLoading = true)
         getPokemonList()
     }
 
@@ -30,12 +32,27 @@ class MainViewModel @Inject constructor(
             is MainActions.PokemonClicked -> {
                 getPokemonList()
             }
+            is MainActions.ShowTypeDialog -> {
+                screenState = screenState.copy(showTypeDialog = true)
+            }
+            is MainActions.HideTypeDialog -> {
+                screenState = screenState.copy(showTypeDialog = false)
+            }
+            is MainActions.ConfirmTypeSelection -> {
+                screenState = screenState.copy(
+                    showTypeDialog = false,
+                    selectedTypes = action.types
+                )
+                // Aquí podrías lanzar un nuevo use case filtrado
+                // getPokemonListFiltered(action.types)
+            }
         }
     }
 
     private fun getPokemonList() {
+        val pokemon = getPokemonListUseCase().cachedIn(viewModelScope)
         screenState = screenState.copy(
-            pokemonList = getPokemonListUseCase().cachedIn(viewModelScope),
+            pokemonList = pokemon,
             isLoading = false,
             error = null
         )

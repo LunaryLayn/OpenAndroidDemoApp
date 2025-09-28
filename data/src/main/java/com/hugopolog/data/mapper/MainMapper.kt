@@ -2,21 +2,13 @@ package com.hugopolog.data.mapper
 
 import com.hugopolog.data.entities.pokemon.PokemonDataModel
 import com.hugopolog.domain.entities.pokemon.PokemonModel
+import com.hugopolog.domain.entities.pokemon.PokemonType
 
 fun PokemonDataModel.toDto(): PokemonModel {
-    val id = extractIdFromUrl(url)
     return PokemonModel(
-        id = id,
+        id = this.id,
         name = this.name,
-        spriteUrl = spriteUrl(id)
+        sprite = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${this.id}.png",
+        type = this.type.mapNotNull { PokemonType.fromString(it) }
     )
-}
-
-fun extractIdFromUrl(url: String): Int {
-    return url.trimEnd('/').substringAfterLast('/').toInt()
-}
-
-// Using this to get the sprite image of the pokemon on the list call.
-fun spriteUrl(id: Int): String {
-    return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
 }

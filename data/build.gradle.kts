@@ -1,8 +1,12 @@
+import org.gradle.declarative.dsl.schema.FqName.Empty.packageName
+import org.gradle.kotlin.dsl.apollo
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt.android) // 🔥 Plugin de Hilt
     kotlin("kapt")
+    alias(libs.plugins.apollo)
 }
 
 android {
@@ -23,11 +27,21 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+    apollo {
+        service("service") {
+            packageName.set("com.hugopolog.data.graphql")
+            introspection {
+                endpointUrl.set("graphql.pokeapi.co/v1beta2")
+                schemaFile.set(file("src/main/graphql/com/hugopolog/data/schema.json"))
+            }
+        }
+    }
+
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
@@ -47,4 +61,5 @@ dependencies {
     implementation(libs.paging.runtime)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    implementation(libs.apollo.runtime)
 }

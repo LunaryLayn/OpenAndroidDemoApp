@@ -7,4 +7,6 @@ sealed interface AppScreens {
 
     @Serializable
     data object MainScreen: AppScreens
+    @Serializable
+    data object HomeScreen: AppScreens
 }

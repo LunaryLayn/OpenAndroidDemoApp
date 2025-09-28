@@ -217,9 +217,24 @@ val surfaceContainerDarkHighContrast = Color(0xFF2E3036)
 val surfaceContainerHighDarkHighContrast = Color(0xFF393B41)
 val surfaceContainerHighestDarkHighContrast = Color(0xFF45474C)
 
-
-
-
+val NormalColor = Color(0xFFA8A77A)
+val FireColor = Color(0xFFEE8130)
+val WaterColor = Color(0xFF6390F0)
+val ElectricColor = Color(0xFFF7D02C)
+val GrassColor = Color(0xFF7AC74C)
+val IceColor = Color(0xFF96D9D6)
+val FightingColor = Color(0xFFC22E28)
+val PoisonColor = Color(0xFFA33EA1)
+val GroundColor = Color(0xFFE2BF65)
+val FlyingColor = Color(0xFFA98FF3)
+val PsychicColor = Color(0xFFF95587)
+val BugColor = Color(0xFFA6B91A)
+val RockColor = Color(0xFFB6A136)
+val GhostColor = Color(0xFF735797)
+val DragonColor = Color(0xFF6F35FC)
+val DarkColor = Color(0xFF705746)
+val SteelColor = Color(0xFFB7B7CE)
+val FairyColor = Color(0xFFD685AD)
 
 
 
