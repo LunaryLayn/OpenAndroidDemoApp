@@ -1,39 +1,33 @@
 package com.hugopolog.data.util
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.apollographql.apollo.ApolloClient
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import com.hugopolog.data.entities.pokemon.PokemonDataModel
+import com.apollographql.apollo.api.Optional
 import com.hugopolog.data.graphql.GetAllPokemonQuery
 import com.hugopolog.data.mapper.toDto
-import com.hugopolog.domain.entities.config.DataError
-import com.hugopolog.domain.entities.pokemon.PokemonModel
-import org.json.JSONObject
+import com.hugopolog.domain.entities.pokemon.PokemonListModel
 
 class PokemonApolloPagingSource(
     private val apolloClient: ApolloClient,
-    private val pageSize: Int
-) : PagingSource<Int, PokemonModel>() {
+    private val pageSize: Int,
+    val name: String? = null,                // make nullable
+    val type: List<String>? = emptyList()    // make nullable
+) : PagingSource<Int, PokemonListModel>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonModel> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonListModel> {
         val offset = params.key ?: 0
 
         return try {
             val response = apolloClient.query(
-                GetAllPokemonQuery(limit = pageSize, offset = offset)
+                GetAllPokemonQuery(
+                    limit = pageSize, offset = offset,
+                    name = Optional.presentIfNotNull(name),
+                    types = Optional.presentIfNotNull(type)
+                )
             ).execute()
 
-            val pokemons = response.data?.pokemons?.map { p ->
-
-                PokemonDataModel(
-                    id = p.id,
-                    name = p.name,
-                    type = p.pokemontypes.map { it.type?.name ?: "" },
-                ).toDto()
-            } ?: emptyList()
+            val pokemons = response.data?.pokemons?.map { p -> p.toDto() } ?: emptyList()
 
             LoadResult.Page(
                 data = pokemons,
@@ -46,7 +40,7 @@ class PokemonApolloPagingSource(
     }
 
 
-    override fun getRefreshKey(state: PagingState<Int, PokemonModel>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, PokemonListModel>): Int? {
         return state.anchorPosition?.let { pos ->
             val page = state.closestPageToPosition(pos)
             page?.prevKey?.plus(pageSize) ?: page?.nextKey?.minus(pageSize)
@@ -54,5 +48,3 @@ class PokemonApolloPagingSource(
     }
 }
 
-
-class AppException(val dataError: DataError) : Exception(dataError.toString())

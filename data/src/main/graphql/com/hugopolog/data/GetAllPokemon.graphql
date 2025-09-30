@@ -1,11 +1,26 @@
-query GetAllPokemon($limit: Int!, $offset: Int!) {
-    pokemons: pokemon(limit: $limit, offset: $offset, order_by: {id: asc}) {
+query GetAllPokemon(
+    $limit: Int!,
+    $offset: Int!,
+    $name: String,
+    $types: [String!]
+) {
+    pokemons: pokemon(
+        limit: $limit,
+        offset: $offset,
+        order_by: { id: asc },
+        where: {
+            _and: [
+                { name: { _ilike: $name } }
+                { pokemontypes: { type: { name: { _in: $types } } }
+
+                }
+            ]
+        }
+    ) {
         id
         name
         pokemontypes {
-            type {
-                name
-            }
+            type { name }
         }
     }
 }

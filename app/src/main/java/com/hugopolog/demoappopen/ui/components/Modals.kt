@@ -36,11 +36,12 @@ import com.hugopolog.domain.entities.pokemon.PokemonType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TypeSelectorDialog(
+    selectedTypes : List<PokemonType>,
     onDismiss: () -> Unit,
     onConfirm: (List<PokemonType>) -> Unit
 ) {
 
-    var selectedTypes by remember { mutableStateOf(setOf<PokemonType>()) }
+    var selectedTypes by remember { mutableStateOf(selectedTypes) }
 
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Text(

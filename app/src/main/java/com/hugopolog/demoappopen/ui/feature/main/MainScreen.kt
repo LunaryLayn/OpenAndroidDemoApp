@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,7 +33,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
@@ -53,15 +54,11 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.hugopolog.demoappopen.R
 import com.hugopolog.demoappopen.ui.components.TypeSelectorDialog
 import com.hugopolog.demoappopen.util.getColor
 import com.hugopolog.demoappopen.util.getImage
-import com.hugopolog.domain.entities.pokemon.PokemonModel
+import com.hugopolog.domain.entities.pokemon.PokemonListModel
 
 @Composable
 fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
@@ -79,20 +76,6 @@ fun MainScreenContent(
 ) {
     val pokemons = state.pokemonList.collectAsLazyPagingItems()
     Log.d("MainScreen", "Pokemons: ${pokemons.itemCount}")
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bulbasaur))
-    val progress by animateLottieCompositionAsState(
-        composition,
-        iterations = LottieConstants.IterateForever,
-        isPlaying = true,
-        speed = 0.8f
-    )
-    val composition2 by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.pokeball))
-    val progress2 by animateLottieCompositionAsState(
-        composition2,
-        iterations = LottieConstants.IterateForever,
-        isPlaying = true,
-        speed = 0.5f
-    )
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { onAction(MainActions.ShowTypeDialog) }) {
@@ -100,24 +83,24 @@ fun MainScreenContent(
             }
         },
         topBar = {
-        TopAppBar(
-            title = {}, // vacío
-            actions = {
-                IconButton(onClick = { /* TODO: Acción 1 */ }) {
-                    Icon(
-                        imageVector = Icons.Default.Info,
-                        contentDescription = "Favorito"
-                    )
+            TopAppBar(
+                title = {},
+                actions = {
+                    IconButton(onClick = { /* TODO: Acción 1 */ }) {
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = "Favorito"
+                        )
+                    }
+                    IconButton(onClick = { /* TODO: Acción 2 */ }) {
+                        Icon(
+                            imageVector = Icons.Default.Build,
+                            contentDescription = "Ajustes"
+                        )
+                    }
                 }
-                IconButton(onClick = { /* TODO: Acción 2 */ }) {
-                    Icon(
-                        imageVector = Icons.Default.Build,
-                        contentDescription = "Ajustes"
-                    )
-                }
-            }
-        )
-    }) { paddingValues ->
+            )
+        }) { paddingValues ->
         Box(
             modifier = Modifier
                 .padding(paddingValues)
@@ -126,6 +109,7 @@ fun MainScreenContent(
 
             if (state.showTypeDialog) {
                 TypeSelectorDialog(
+                    selectedTypes = state.selectedTypes,
                     onDismiss = { onAction(MainActions.HideTypeDialog) },
                     onConfirm = { selected ->
                         onAction(MainActions.ConfirmTypeSelection(selected))
@@ -139,54 +123,69 @@ fun MainScreenContent(
                 Spacer(Modifier.padding(4.dp))
                 Text("Busca tu pókemon por nombre o filtra arriba por tu tipo favorito", style = MaterialTheme.typography.bodyMedium)
                 Spacer(Modifier.padding(4.dp))
-                OutlinedTextField("", {}, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(state.searchField, { onAction(MainActions.SearchQueryChange(it)) }, modifier = Modifier.fillMaxWidth())
                 Spacer(Modifier.padding(8.dp))
-                PokemonsList(pokemons)
+                PokemonsList(pokemons) {
+                    onAction(MainActions.PokemonClicked(it))
+                }
             }
-            /*LottieAnimation(
-                composition = composition2,
-                progress = { progress2 },
+        }
+    }
+
+
+}
+
+@Composable
+fun PokemonsList(pokemons: LazyPagingItems<PokemonListModel>, modifier: Modifier = Modifier, onPokemonClicked: (PokemonListModel) -> Unit) {
+    Box(modifier = modifier.fillMaxSize()) {
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(
+                count = pokemons.itemCount,
+                key = { index -> pokemons[index]?.id ?: index }
+            ) { index ->
+                pokemons[index]?.let { pokemon ->
+                    PokemonItem(pokemon = pokemon) {
+                        onPokemonClicked(it)
+                    }
+                }
+            }
+
+
+            if (pokemons.loadState.append is LoadState.Loading) {
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        androidx.compose.material3.LinearProgressIndicator(
+                            modifier = Modifier.fillMaxWidth(0.6f)
+                        )
+                    }
+                }
+            }
+        }
+
+        if (pokemons.loadState.refresh is LoadState.Loading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
             )
-            Column(Modifier.padding(paddingValues)) {
-                Text("¡Bienvenido a PokeApp!")
-                LottieAnimation(
-                    composition = composition,
-                    progress = { progress },
-                    modifier = Modifier.weight(0.4f)
-                )
-                Text("Esta App solo es una demo tecnica sencilla de arquitectura limpia y buenas practicas")
-                Text("Puedes ver mas informacion de la arquitectura y las tecnologias en la pagina de GitHub")
-                Text("© Hugo Polo 2025")
-                PokemonsList(pokemons, modifier = Modifier.weight(0.6f))
-            }*/
-        }
-    }
-
-
-}
-
-@Composable
-fun PokemonsList(pokemons: LazyPagingItems<PokemonModel>, modifier: Modifier = Modifier) {
-    LazyColumn(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(
-            count = pokemons.itemCount,
-            key = { index -> pokemons[index]?.id ?: index } // clave única
-        ) { index ->
-            pokemons[index]?.let { pokemon ->
-                PokemonItem(pokemon = pokemon)
-            }
         }
     }
 }
 
+
 @Composable
-fun PokemonItem(pokemon: PokemonModel) {
+fun PokemonItem(pokemon: PokemonListModel, onPokemonClicked: (PokemonListModel) -> Unit) {
     Log.d("PokemonItem", "Pokemon: $pokemon")
     Row(
         modifier = Modifier
+            .clickable { onPokemonClicked(pokemon) }
             .clip(RoundedCornerShape(16.dp))
             .fillMaxWidth()
             .background(
@@ -251,6 +250,7 @@ fun PokemonItem(pokemon: PokemonModel) {
                             color = Color.White
                         )
                     }
+
                     is AsyncImagePainter.State.Error -> {
                         Icon(
                             imageVector = Icons.Default.Close,
@@ -259,6 +259,7 @@ fun PokemonItem(pokemon: PokemonModel) {
                             modifier = Modifier.size(48.dp)
                         )
                     }
+
                     else -> {
                         SubcomposeAsyncImageContent()
                     }
@@ -311,14 +312,6 @@ fun PokemonSpriteWithPokeballOutline(
                 useCenter = false,
                 style = Stroke(width = strokeWidth)
             )
-
-            // Línea negra central
-            /* drawLine(
-                 color = Color.Black,
-                 start = Offset(0f, radius),
-                 end = Offset(size.width, radius),
-                 strokeWidth = strokeWidth / 2
-             )*/
         }
 
         // Sprite en el centro

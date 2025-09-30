@@ -6,6 +6,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.hugopolog.demoappopen.ui.feature.detail.DetailScreen
 import com.hugopolog.demoappopen.ui.feature.home.HomeScreen
 import com.hugopolog.demoappopen.ui.feature.main.MainScreen
 
@@ -40,6 +42,10 @@ fun AppNavigation(
         }
         composable<AppScreens.MainScreen> {
             MainScreen()
+        }
+        composable<AppScreens.DetailScreen> {
+            val args = it.toRoute<AppScreens.DetailScreen>()
+            DetailScreen(id = args.pokemonId)
         }
     }
 }
