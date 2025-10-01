@@ -13,7 +13,7 @@ ENG: This project is another showcase in my portfolio, designed for recruiters t
 
 > ⚠️ Note: This project intentionally does **not include** some aspects that are instead demonstrated in **[CryptoWatcher](https://github.com/LunaryLayn/CryptoWatcher)**:  
 > - **Unit Tests** (with Mockito + JUnit).  
-> - **Error handling and visualization in the UI**.  
+> - **Error visualization in the UI**.  
 > - **MVVM pattern with REST (Retrofit)** instead of MVI with GraphQL.  
 >   
 > If you want to see those features in action, please check **[CryptoWatcher](https://github.com/LunaryLayn/CryptoWatcher)**.  
@@ -58,7 +58,7 @@ Este proyecto es otro showcase en mi portfolio, diseñado para que los reclutado
 
 > ⚠️ Nota: Este proyecto intencionalmente **no incluye** ciertos aspectos que se muestran en **[CryptoWatcher](https://github.com/LunaryLayn/CryptoWatcher)**:  
 > - **Pruebas unitarias** (con Mockito + JUnit).  
-> - **Manejo y visualización de errores en la UI**.  
+> - **Visualización de errores en la UI**.  
 > - **Patrón MVVM con REST (Retrofit)** en lugar de MVI con GraphQL.  
 >   
 > Si quieres ver estas características en acción, revisa **[CryptoWatcher](https://github.com/LunaryLayn/CryptoWatcher)**.  
