@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ © 2025 Hugo Polo - Github: https://github.com/LunaryLayn
+  -->
+
 <resources>
     <!-- This is the certificate array your Kotlin code references -->
     <array name="com_google_android_gms_fonts_certs">

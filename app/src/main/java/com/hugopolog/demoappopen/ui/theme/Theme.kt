@@ -1,3 +1,7 @@
+/*
+ * © 2025 Hugo Polo - Github: https://github.com/LunaryLayn
+ */
+
 package com.hugopolog.demoappopen.ui.theme
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

@@ -1,3 +1,7 @@
+/*
+ * © 2025 Hugo Polo - Github: https://github.com/LunaryLayn
+ */
+
 package com.hugopolog.data.local
 
 object Constants {
