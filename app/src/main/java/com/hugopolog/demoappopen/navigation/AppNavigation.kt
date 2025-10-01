@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.hugopolog.demoappopen.ui.feature.detail.DetailScreen
-import com.hugopolog.demoappopen.ui.feature.home.HomeScreen
 import com.hugopolog.demoappopen.ui.feature.main.MainScreen
 
 @Composable
@@ -37,9 +36,6 @@ fun AppNavigation(
     }
 
     NavHost(navController = navController, startDestination = navigator.startDestination) {
-        composable<AppScreens.HomeScreen> {
-            HomeScreen()
-        }
         composable<AppScreens.MainScreen> {
             MainScreen()
         }

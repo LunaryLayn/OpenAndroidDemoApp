@@ -1,3 +1,45 @@
 <resources>
     <string name="app_name">DemoAppOpen</string>
+    <!-- Tabs -->
+    <string name="info_tab">Information</string>
+    <string name="stats_tab">Base Stats</string>
+    <string name="evolutions_tab">Evolutions</string>
+
+    <!-- Info section -->
+    <string name="about">About</string>
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
+    <string name="base_experience">Base Experience</string>
+    <string name="generation">Generation</string>
+
+    <!-- Gender section -->
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="genderless">Genderless</string>
+
+    <!-- Abilities section -->
+    <string name="abilities">Abilities</string>
+
+    <!-- Evolutions section -->
+    <string name="evolution">Evolution</string>
+    <string name="no_evolutions">This Pokémon has no evolutions</string>
+
+    <!-- Other -->
+    <string name="total">Total</string>
+    <string name="pokeball">Pokeball</string>
+    <string name="error">Error</string>
+
+    <string name="filter">Filter</string>
+    <string name="info">Info</string>
+    <string name="settings">Settings</string>
+    <string name="pokedex_title">Pokédex</string>
+    <string name="pokedex_description">
+        Search your Pokémon by name or filter below by your favorite type!
+    </string>
+    <string name="search_placeholder">Type something here…</string>
+    <string name="filter_by_type">Filter by type!</string>
+    <string name="cancel">Cancel</string>
+    <string name="evolution_line">Evolution line of:</string>
+    <string name="base_stats">Base stats represent a Pokémon’s overall potential and how strong it is compared to others.</string>
 </resources>

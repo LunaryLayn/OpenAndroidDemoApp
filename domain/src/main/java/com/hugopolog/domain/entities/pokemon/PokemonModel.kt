@@ -3,8 +3,8 @@ package com.hugopolog.domain.entities.pokemon
 data class PokemonModel(
     val id: Int,
     val name: String,
-    val height: Int,
-    val weight: Int,
+    val height: Float,
+    val weight: Float,
     val gender: GenderDistribution,
     val baseExperience: Int,
     val abilities: List<String>,

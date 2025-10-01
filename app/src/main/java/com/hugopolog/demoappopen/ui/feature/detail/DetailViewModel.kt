@@ -1,14 +1,11 @@
 package com.hugopolog.demoappopen.ui.feature.detail
 
-import android.R.attr.action
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.hugopolog.demoappopen.ui.feature.BaseViewModel
-import com.hugopolog.demoappopen.ui.feature.main.MainActions
-import com.hugopolog.demoappopen.ui.feature.main.MainState
 import com.hugopolog.domain.entities.config.DataResult
 import com.hugopolog.domain.usecase.GetPokemonDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,12 +25,18 @@ class DetailViewModel @Inject constructor(
     }
 
     fun onAction(action: DetailActions) {
-        when(action) {
+        when (action) {
             is DetailActions.BackClicked -> {
                 navigateUp()
             }
+            is DetailActions.TabSelected -> {
+                screenState = screenState.copy(
+                    selectedTab = action.tab
+                )
+            }
         }
     }
+
 
 
 

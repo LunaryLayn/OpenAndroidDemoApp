@@ -26,8 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.hugopolog.demoappopen.R
 import com.hugopolog.demoappopen.util.getColor
 import com.hugopolog.demoappopen.util.getImage
 import com.hugopolog.domain.entities.pokemon.PokemonType
@@ -45,7 +47,7 @@ fun TypeSelectorDialog(
 
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Text(
-            "Selecciona para filtrar por tipo",
+            stringResource(R.string.filter_by_type),
             fontWeight = FontWeight.SemiBold,
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally)
@@ -95,8 +97,8 @@ fun TypeSelectorDialog(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            TextButton(onClick = onDismiss) { Text("Cancelar") }
-            TextButton(onClick = { onConfirm(selectedTypes.toList()) }) { Text("Aceptar") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = { onConfirm(selectedTypes.toList()) }) { Text(stringResource(R.string.filter)) }
         }
     }
 }

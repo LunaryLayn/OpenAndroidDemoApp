@@ -7,8 +7,6 @@ sealed interface AppScreens {
 
     @Serializable
     data object MainScreen: AppScreens
-    @Serializable
-    data object HomeScreen: AppScreens
 
     @Serializable
     data class DetailScreen(val pokemonId: Int): AppScreens

@@ -23,8 +23,8 @@ fun GetPokemonDetailQuery.Pokemon.toDto(): PokemonModel {
     return PokemonModel(
         id = this.id,
         name = this.name.replaceFirstChar { it.uppercase() },
-        height = this.height ?: 0,
-        weight = this.weight ?: 0,
+        height = (this.height ?: 0)/ 10f,
+        weight =( this.weight ?: 0)/ 10f,
         gender = parseGenderRate(species?.gender_rate ?: 0),
         baseExperience = this.base_experience ?: 0,
         abilities = this.pokemonabilities.map { abilityWrapper ->
@@ -32,7 +32,17 @@ fun GetPokemonDetailQuery.Pokemon.toDto(): PokemonModel {
         },
         types = this.pokemontypes.mapNotNull { PokemonType.fromString(it.type!!.name) },
         stats = this.pokemonstats.associate { statWrapper ->
-            statWrapper.stat!!.name.replaceFirstChar { it.uppercase() } to statWrapper.base_stat
+            val rawName = statWrapper.stat!!.name
+            val displayName = when (rawName.lowercase()) {
+                "hp" -> "HP"
+                "attack" -> "Attack"
+                "defense" -> "Defense"
+                "special-attack" -> "Sp. Attack"
+                "special-defense" -> "Sp. Defense"
+                "speed" -> "Speed"
+                else -> rawName.replaceFirstChar { it.uppercase() }
+            }
+            displayName to statWrapper.base_stat
         },
         evolutions = species?.evolutionchain?.pokemonspecies?.map { evo ->
             Evolution(
@@ -41,7 +51,7 @@ fun GetPokemonDetailQuery.Pokemon.toDto(): PokemonModel {
                 sprite = buildSpriteUrl(evo.id)
             )
         },
-        generation = species?.generation?.name!!.replaceFirstChar { it.uppercase() },
+        generation = formatGeneration(species?.generation?.name!!),
         sprite = buildSpriteUrl(this.id)
     )
 }
@@ -60,4 +70,11 @@ fun parseGenderRate(rate: Int): GenderDistribution {
             femalePercent = female
         )
     }
+}
+
+fun formatGeneration(raw: String): String {
+    return raw.replace("generation-", "Generation ")
+        .replaceFirstChar { it.uppercase() } // asegura la G mayúscula
+        .substringBefore(" ") + " " +
+            raw.substringAfter("-").uppercase()
 }
